@@ -1,0 +1,11 @@
+#textArea { 
+	width: 800px;
+	height: 600px;
+	margin-bottom: 10px;
+	padding: 10px; 	
+	outline: 2px solid #CCC;
+}
+#textArea:focus{
+	outline: 2px dashed #CCC; 
+	outline: 2px dashed #0090D2;
+}

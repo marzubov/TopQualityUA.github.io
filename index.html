@@ -1,7 +1,33 @@
 <!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+	<head>
+		<meta charset="utf-8">
+		<title>Simple Text Editor</title>
+		<script src="js/script.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+	</head>
+
+	<body onload="loading()">
+		
+		<div id="textArea" contenteditable="true" >
+				
+					Simple Text editor!)									
+					Just type what you want		
+			
+		</div>
+		<button id='b' class="addButton"onclick="executeCommand('bold')">B</button>
+		<button id='i' class="addButton" onclick="executeCommand('italic')">I</button>
+		<button id='u' class="addButton" onclick="executeCommand('underline')">U</button>
+		<button id='ol' class="addButton" onclick="executeCommand('insertorderedlist')">OL</button>
+		<button id='ul' class="addButton" onclick="executeCommand('insertunorderedlist')">UL</button>
+		<select onchange="executeCommand('fontname',this[this.selectedIndex].value);">
+		<option selected>- font -</option>
+		<option>Arial</option>
+		<option>Comic Sans MS</option>
+		<option>Courier New</option>
+		<option>Tahoma</option>
+		<option>Times New Roman</option>
+		</select>
+
+	</body>
 </html>
