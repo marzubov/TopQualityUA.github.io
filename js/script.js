@@ -11,14 +11,15 @@ function loading() {
     x = e.clientX;
     y = e.clientY;
     var file = e.dataTransfer.files[0];
+
     if (file.type.match('image.*')) {
       var reader = new FileReader();
+      
       reader.onload = (function(theFile) {
-
         var dataURI = theFile.target.result;
-
         var img = document.createElement("img");
         img.src = dataURI;
+
         if (document.caretPositionFromPoint) {
           var pos = document.caretPositionFromPoint(x, y);
           range = document.createRange();
@@ -26,14 +27,12 @@ function loading() {
           range.collapse();
           range.insertNode(img);
         }
-
         else if (document.caretRangeFromPoint) {
           range = document.caretRangeFromPoint(x, y);
           range.insertNode(img);
         }
         else
         {
-
           console.log("don't support IE");
         }
       });                    
