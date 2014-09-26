@@ -4,6 +4,8 @@
 	margin-bottom: 10px;
 	padding: 10px; 	
 	outline: 2px solid #CCC;
+	overflow:scroll;
+    overflow-x:hidden;
 }
 #textArea:focus{
 	outline: 2px dashed #CCC; 
