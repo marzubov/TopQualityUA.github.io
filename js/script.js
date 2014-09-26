@@ -1,80 +1,51 @@
-var oDoc, sDefTxt;
+var textArea;
 
 function loading() {
   var handleDrag = function(e) {
-                //kill any default behavior
-                e.stopPropagation();
-                e.preventDefault();
-            };
-            var handleDrop = function(e) {
-                //kill any default behavior
-                e.stopPropagation();
-                e.preventDefault();
-                //console.log(e);
-                //get x and y coordinates of the dropped item
-                x = e.clientX;
-                y = e.clientY;
-                //drops are treated as multiple files. Only dealing with single files right now, so assume its the first object you're interested in
-                var file = e.dataTransfer.files[0];
-                //don't try to mess with non-image files
-                if (file.type.match('image.*')) {
-                    //then we have an image,
+    e.stopPropagation();
+    e.preventDefault();
+  };
+  var handleDrop = function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    x = e.clientX;
+    y = e.clientY;
+    var file = e.dataTransfer.files[0];
+    if (file.type.match('image.*')) {
+      var reader = new FileReader();
+      reader.onload = (function(theFile) {
 
-                    //we have a file handle, need to read it with file reader!
-                    var reader = new FileReader();
+        var dataURI = theFile.target.result;
 
-                    // Closure to capture the file information.
-                    reader.onload = (function(theFile) {
-                        //get the data uri
-                        var dataURI = theFile.target.result;
-                        //make a new image element with the dataURI as the source
-                        var img = document.createElement("img");
-                        img.src = dataURI;
+        var img = document.createElement("img");
+        img.src = dataURI;
+        if (document.caretPositionFromPoint) {
+          var pos = document.caretPositionFromPoint(x, y);
+          range = document.createRange();
+          range.setStart(pos.offsetNode, pos.offset);
+          range.collapse();
+          range.insertNode(img);
+        }
 
-                        //Insert the image at the carat
+        else if (document.caretRangeFromPoint) {
+          range = document.caretRangeFromPoint(x, y);
+          range.insertNode(img);
+        }
+        else
+        {
 
-                        // Try the standards-based way first. This works in FF
-                        if (document.caretPositionFromPoint) {
-                            var pos = document.caretPositionFromPoint(x, y);
-                            range = document.createRange();
-                            range.setStart(pos.offsetNode, pos.offset);
-                            range.collapse();
-                            range.insertNode(img);
-                        }
-                        // Next, the WebKit way. This works in Chrome.
-                        else if (document.caretRangeFromPoint) {
-                            range = document.caretRangeFromPoint(x, y);
-                            range.insertNode(img);
-                        }
-                        else
-                        {
-                            //not supporting IE right now.
-                            console.log('could not find carat');
-                        }
-
-
-                    });
-                    //this reads in the file, and the onload event triggers, which adds the image to the div at the carat
-                    reader.readAsDataURL(file);
-                }
-            };
-
-            var dropZone = document.getElementById('textArea');
-            dropZone.addEventListener('dragover', handleDrag, false);
-            dropZone.addEventListener('drop', handleDrop, false);
-  oDoc = document.getElementById("textArea");
-  sDefTxt = oDoc.innerHTML;
-  if (document.all) {
-      oDoc.innerHTML = oDoc.innerText;
-    } else {
-      oContent = document.createRange();
-      oContent.selectNodeContents(oDoc.firstChild);
-      oDoc.innerHTML = oContent.toString();
+          console.log("don't support IE");
+        }
+      });                    
+      reader.readAsDataURL(file);
     }
-  oDoc.contentEditable = true; 
-  oDoc.focus();
+  };
+  var dropZone = document.getElementById('textArea');
+  dropZone.addEventListener('dragover', handleDrag, false);
+  dropZone.addEventListener('drop', handleDrop, false);
+  textArea = document.getElementById("textArea");  
 }
 
 function executeCommand(sCmd, sValue) {
-  document.execCommand(sCmd, false, sValue); oDoc.focus();
+  document.execCommand(sCmd, false, sValue); textArea.focus();
 }
